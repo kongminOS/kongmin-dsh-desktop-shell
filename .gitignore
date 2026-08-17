@@ -1,0 +1,10 @@
+target/
+node_modules/
+dist/
+*.key
+*.pem
+.env
+state/
+wkq-data/
+*.bak*
+.DS_Store
