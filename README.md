@@ -29,6 +29,22 @@ Or build a release installer:
 cargo tauri build
 ```
 
+## Known Issues & Fixes (DSH Engine 0.1.0-rc.6 / rc.7)
+
+The following two issues belong to the **DeepSeek Harness engine itself** (not this shell). Both exist in DSH 0.1.0-rc.6 and rc.7. Machines patched as described below work normally; official releases may include these fixes later.
+
+**1. Creating a session / selecting a model fails with `agent-presets: refusing to compose an unscoped context`**
+
+- Symptom: In GUI mode, creating or resuming any agent (new session, resume, model switch) fails.
+- Root cause: The engine dependency tree and the user config tree (`~/.dsh/profiles/web/node_modules`) each load a copy of `@deepseek-ai/dsh-scope`, where the scope tag `kScope = Symbol("dsh.scope")` is a module-local Symbol. The two instances differ, so `createScope` writes with one instance while `mount` reads with the other and always sees `undefined`.
+- Fix: Change `const kScope = Symbol("dsh.scope")` to `const kScope = Symbol.for("dsh.scope")` in both copies (global-registry Symbol, shared across instances).
+
+**2. Chat fails with `DeepSeek API error (HTTP 404)`**
+
+- Symptom: Agents are created fine, but sending a message returns 404 from the LLM call.
+- Root cause: If `llm-deepseek.baseURL` in `~/.dsh/settings.yaml` is set to `https://api.deepseek.com/anthropic` (Anthropic-compatible endpoint), it mismatches DSH's OpenAI-format adapter (which calls `/chat/completions`), so requests hit a non-existent path.
+- Fix: Set `llm-deepseek.baseURL` to `https://api.deepseek.com` (or delete the key to use the default). settings.yaml hot-reloads.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
@@ -36,3 +52,4 @@ MIT — see [LICENSE](LICENSE).
 ---
 
 *Kongmin Rein is an independent third-party wrapper. It is not affiliated with or endorsed by DeepSeek.*
+
