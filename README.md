@@ -8,6 +8,11 @@ A thin desktop shell that wraps the **official DeepSeek Harness web UI** into a 
 
 DeepSeek Harness 的官方 Web 界面（`dsh web`，默认 `http://127.0.0.1:3080`）已经很好用。这个壳只是给你一个原生桌面窗口，而不是浏览器标签页。
 
+
+## 国内镜像（Gitee）
+
+- 国内镜像仓库：https://gitee.com/kongminos/kongmin-dsh-desktop-shell （免代理，国内下载/克隆更快）
+- GitHub 原仓：https://github.com/kongminOS/kongmin-dsh-desktop-shell
 ## Requirements
 
 - [DeepSeek Harness](https://github.com/deepseek-ai/dsh) CLI installed: `npm install -g @deepseek-ai/dsh`
